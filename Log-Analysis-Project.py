@@ -32,6 +32,30 @@ def topArticles():
 	finally:
 		db.close
 
+def topAuthors():
+	try:
+		db = psycopg2.connect(database="news")
+		cur=db.cursor()
+		secondQuery='''
+		SELECT authors.name, count(*) as views
+		FROM articles, log, authors
+		WHERE articles.author = authors.id
+		and articles.slug = substr(log.path, 10)
+		GROUP BY authors.name
+		ORDER BY views DESC
+		LIMIT 3;
+		'''
+		cur.execute(secondQuery)
+		rows = cur.fetchall()
+		print ('\nMost Viewed Authors')
+
+		j=1
+		for i in rows:
+			print( str(j)+'-'+i[0]+' has '+ str(i[1]) +' views')
+			j += 1
+
+	finally:
+		db.close
 
 
 
@@ -46,3 +70,4 @@ def topArticles():
 
 if __name__ == '__main__':
 	topArticles()
+	topAuthors()
