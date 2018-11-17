@@ -27,7 +27,7 @@ def topArticles():
 
 		j=1
 		for i in rows:
-			print( str(j)+'-'+i[0]+' has '+ str(i[1]) +' views')
+			print( str(j)+'-'+i[0]+' has '+ str(i[1]) +' views.')
 			j += 1
 	finally:
 		db.close
@@ -51,23 +51,41 @@ def topAuthors():
 
 		j=1
 		for i in rows:
-			print( str(j)+'-'+i[0]+' has '+ str(i[1]) +' views')
+			print( str(j)+'-'+i[0]+' has '+ str(i[1]) +' views.')
 			j += 1
 
 	finally:
 		db.close
+def mostErrorsDay():
+	try:
+		db = psycopg2.connect(database="news")
+		cur=db.cursor()
+		thirdQuery='''
+		select errors.day, round(((errors.not_found*1.0) / total_per_day.num)*100,1) as percent
+		from (
+		select date_trunc('day',time) "day", count(*) as num
+		from log group by day) as total_per_day
+		join (
+	    select date_trunc('day',time) "day", count(*) as not_found from log
+		where status = '404 NOT FOUND' group by day) as errors
+		on errors.day = total_per_day.day
+		where (round(((errors.not_found*1.0) / total_per_day.num)*100,1) >1)
+		order by percent desc;
+		'''
+		cur.execute(thirdQuery)
+		rows = cur.fetchall()
+		print ('\nDays that has more than 1% errors')
 
 
+		for i in rows:
+
+			print( i[0].strftime('%x')+' has '+ str(i[1]) +'% errors.')
 
 
-
-
-
-
-
-
-
+	finally:
+		db.close
 
 if __name__ == '__main__':
 	topArticles()
 	topAuthors()
+	mostErrorsDay()
