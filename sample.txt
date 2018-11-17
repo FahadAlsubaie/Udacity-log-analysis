@@ -1,0 +1,16 @@
+Starting
+Database is connceted now
+
+
+Top Most Viewed Articles
+1-Candidate is jerk, alleges rival has 338647 views.
+2-Bears love berries, alleges bear has 253801 views.
+3-Bad things gone, say good people has 170098 views.
+
+Most Viewed Authors
+1-Ursula La Multa has 507594 views.
+2-Rudolf von Treppenwitz has 423457 views.
+3-Anonymous Contributor has 170098 views.
+
+Days that has more than 1% errors
+07/17/16 has 2.3% errors.
